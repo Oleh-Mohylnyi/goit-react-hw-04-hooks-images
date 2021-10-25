@@ -1,9 +1,9 @@
 {
-  "name": "goit-react-hw-03-image-finder",
+  "name": "goit-react-hw-04-hooks-images",
   "version": "0.1.0",
-  "description": "goit-react-hw-03-image-finder",
+  "description": "goit-react-hw-04-hooks-images",
   "private": true,
-  "homepage": "https://Oleh-Mohylnyi.github.io/goit-react-hw-03-image-finder",
+  "homepage": "https://https://oleh-mohylnyi.github.io/goit-react-hw-04-hooks-images",
   "author": "AUTHOR",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
