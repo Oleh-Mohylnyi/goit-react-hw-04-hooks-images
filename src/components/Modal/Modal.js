@@ -12,10 +12,10 @@ export default function Modal({ largeImageURL, closeModal }) {
         return () => {
             window.removeEventListener('keydown', handleKeydown)
         }
+        // eslint-disable-next-line
     },[])
     
     const handleKeydown = e => {
-        console.log("работает листенер")
         if (e.code === 'Escape') {
                 closeModal()
             }

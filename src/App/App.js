@@ -14,7 +14,7 @@ function App() {
 
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
-  const [images, setImages] = useState(null)
+  const [images, setImages] = useState([])
   const [status, setStatus] = useState('idle')
   // idle, pending, resolved, rejected
   // const [error, setError] = useState(null)
@@ -24,7 +24,7 @@ function App() {
   const handleSerchQuery = inputText => {
     setSearchQuery(inputText)
     setPage(1)
-    setImages(null)
+    setImages([])
   }
 
   const clickLoadMore = () => {
@@ -58,32 +58,46 @@ function App() {
       })
   }
 
-  const writeDownData = (newImages) => {
-      if (images === null) {
-          setImages( newImages.hits )
-      } else {
-          setImages(preState => preState.concat(newImages.hits))
+  
+  const writeDownData = function (newImages) {
+    
+    const checkArray = function (newImages, oldImages=[]) {
+        return newImages.reduce((acc, image) => {
+            if (!acc.some((image, acc) => acc.id === image.id)) {
+                return [...acc, image]
+            } else {return acc}
+        }, oldImages)
+    }
+
+    if (images.length === 0) {
+      setImages(checkArray(newImages.hits))
+    } else {
+      const imagesForPush = checkArray(newImages.hits)
+      setImages(preState => [...preState, ...imagesForPush])
       }
   }
   
   useEffect(() => {
-    if (searchQuery === '') {return} 
+    if (searchQuery === '') { return }
     setStatus('pending')
+
     fetchImages()
       .then(responseImages => {
         if (responseImages.hits.length === 0) {
           setStatus('rejected')
           return
         }
-          writeDownData(responseImages)
-          setStatus('resolved')
+        writeDownData(responseImages)
+        setStatus('resolved')
       })
-      .catch(() => {setStatus('rejected')})
+      .catch(() => { setStatus('rejected') })
+    // eslint-disable-next-line
   }, [searchQuery])
 
 
   useEffect(() => {
-    if (page === 1) {return}
+    if (page === 1) { return }
+    
     fetchImages()
       .then(responseImages => {
         if (responseImages.hits.length === 0) {
@@ -95,6 +109,7 @@ function App() {
         setStatus('resolved')
       })
       .catch(error => { setStatus('rejected') })
+    // eslint-disable-next-line
     }, [page])
     
   useEffect(() => {
@@ -104,10 +119,11 @@ function App() {
           behavior: 'smooth',
       })
     }
-    })
+    // eslint-disable-next-line
+    }, [images])
  
   const checkNeedLoadMore = () => {
-    if (images !== null
+    if (images !== []
       && images.length !== 0
       && images.length % 12 === 0) {
         return true    
